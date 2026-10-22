@@ -1,0 +1,740 @@
+/* =====================================================================
+   NONVEG.STORE — CORE STYLESHEET
+   Design system: warm cream/char palette, Fraunces display serif for
+   the "menu board" voice, Manrope for UI/body. Bootstrap handles grid
+   and utilities only — every visual decision here is custom.
+===================================================================== */
+
+/* ---------- Design tokens ---------- */
+:root{
+  --bg: #FFF8EF;
+  --surface: #FFFFFF;
+  --text: #211A16;
+  --muted: #75675E;
+  --primary: #C83B22;
+  --orange: #F0782B;
+  --gold: #D9A441;
+  --green: #5D7548;
+  --border: #EADED2;
+
+  --sea-deep: #0F3B45;
+  --sea-teal: #1E7A75;
+  --sea-foam: #CFEDE8;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+
+  --shadow-soft: 0 12px 32px -12px rgba(33, 26, 22, 0.18);
+  --shadow-strong: 0 24px 60px -20px rgba(33, 26, 22, 0.35);
+
+  --header-h: 78px;
+  --transition-theme: background-color .45s ease, color .45s ease, border-color .45s ease;
+}
+
+/* Dark mode palette — same hues, inverted structure, warm charcoal
+   ground (not pure black) so the brand still reads "food", not "tech". */
+[data-theme="dark"]{
+  --bg: #17110D;
+  --surface: #211913;
+  --text: #F7EEE4;
+  --muted: #B7A99C;
+  --border: #382C24;
+  --shadow-soft: 0 12px 32px -12px rgba(0,0,0,0.55);
+  --shadow-strong: 0 24px 60px -20px rgba(0,0,0,0.7);
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; overflow-x: clip; }
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  /* overflow-x: hidden alone forces the browser to also treat overflow-y
+     as "auto" (per the CSS overflow spec), which turns <body> into its
+     own scroll container and breaks position:sticky headers, plus
+     confuses Bootstrap's scrollbar-width measurement for the offcanvas
+     menu. overflow-x: clip avoids that side effect entirely. */
+  overflow-x: clip;
+  transition: var(--transition-theme);
+}
+
+h1, h2, h3, .font-display{
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+a{ text-decoration: none; color: inherit; }
+img{ max-width: 100%; display: block; }
+
+::selection{ background: var(--primary); color: #fff; }
+
+/* Respect reduced motion globally; individual JS modules also branch on this */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Layout helpers ---------- */
+.section{ padding: 96px 0; position: relative; }
+@media (max-width: 767px){ .section{ padding: 64px 0; } }
+
+.section-eyebrow{
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.section-eyebrow--sea{ color: var(--sea-teal); }
+
+.section-heading{
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  margin-bottom: 14px;
+}
+.section-heading--sea{ color: #EAF7F5; }
+
+.section-sub{
+  color: var(--muted);
+  max-width: 620px;
+  font-size: 1.05rem;
+}
+.section-note{ color: var(--muted); font-size: 0.95rem; max-width: 360px; text-align: right; }
+.section-note--sea{ color: #A9CFCB; }
+@media (max-width: 767px){ .section-note{ text-align: left; } }
+
+/* ---------- Buttons ---------- */
+.btn-call{
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.6rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-soft);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .btn-call:hover{ background: var(--orange); transform: translateY(-2px); color:#fff; box-shadow: var(--shadow-strong); }
+}
+
+.btn-outline-custom{
+  border: 1.5px solid var(--text);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.75rem 1.6rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all .25s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .btn-outline-custom:hover{ background: var(--text); color: var(--bg); }
+}
+
+.btn-whatsapp{
+  background: var(--green);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.75rem 1.6rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .btn-whatsapp:hover{ transform: translateY(-2px); color:#fff; box-shadow: var(--shadow-soft); }
+}
+
+/* ---------- Header ---------- */
+.site-header{
+  position: fixed; /* was position:sticky — sticky depends on the nearest
+     scrolling ancestor behaving correctly, which the overflow-x quirk
+     above was silently breaking. fixed is unconditional: always pinned
+     to the viewport, no matter what any ancestor's overflow is doing. */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid transparent;
+  transition: var(--transition-theme), border-color .35s ease, box-shadow .35s ease;
+}
+.site-header.scrolled{
+  border-bottom-color: var(--border);
+  box-shadow: 0 8px 24px -18px rgba(0,0,0,0.25);
+}
+
+/* Since the fixed header no longer takes up space in normal flow, jumping
+   to an in-page anchor (nav links, footer links) would otherwise land
+   the target section right under the header. This keeps every section
+   anchor clear of it. */
+section[id]{ scroll-margin-top: var(--header-h); }
+
+.brand-logo{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text);
+}
+.brand-logo span{ color: var(--primary); }
+
+.main-nav{ }
+.nav-link-custom{
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  position: relative;
+  padding: 4px 2px;
+}
+.nav-link-custom::after{
+  content: "";
+  position: absolute;
+  left: 0; right: 100%;
+  bottom: -2px;
+  height: 2px;
+  background: var(--primary);
+  transition: right .25s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .nav-link-custom:hover::after{ right: 0; }
+}
+
+.offcanvas-link{ padding: 10px 0; font-size: 1.1rem; border-bottom: 1px solid var(--border); }
+.offcanvas{ background: var(--surface); color: var(--text); }
+.nav-sheet{
+  width: min(84vw, 340px);
+  height: 100%;
+  border-left: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-strong);
+}
+.nav-sheet .offcanvas-header{ padding-top: 18px; padding-bottom: 4px; flex: 0 0 auto; }
+.nav-sheet .offcanvas-body{
+  padding-top: 4px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.nav-sheet .offcanvas-body::-webkit-scrollbar{ width: 6px; }
+.nav-sheet .offcanvas-body::-webkit-scrollbar-track{ background: transparent; }
+.nav-sheet .offcanvas-body::-webkit-scrollbar-thumb{
+  background: var(--border);
+  border-radius: 999px;
+}
+.offcanvas .btn-close{ filter: var(--theme-close-filter, none); }
+[data-theme="dark"] .offcanvas .btn-close{ filter: invert(1); }
+
+/* Self-contained show/hide for the mobile menu panel — deliberately NOT
+   relying on Bootstrap's own .offcanvas/.offcanvas-end CSS (which ships
+   from the CDN link in <head>). If that CDN request fails or is slow
+   (offline testing, blocked network, file:// with no connection),
+   Bootstrap's positioning/transform rules never arrive, so the panel —
+   without this — sits in normal document flow instead of sliding in as
+   a fixed right-side drawer, which looks like the hamburger button
+   "does nothing" when tapped. The ID selector here wins over
+   Bootstrap's class rules either way, so this is safe whether or not
+   Bootstrap loads. Slides in from the right (translateX). */
+#navOffcanvas.nav-sheet{
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1050;
+  visibility: hidden;
+  transform: translateX(100%);
+  transition: transform .3s ease-in-out, visibility 0s .3s;
+}
+#navOffcanvas.nav-sheet.show{
+  visibility: visible;
+  transform: translateX(0);
+  transition: transform .3s ease-in-out;
+}
+
+/* Manual fallback path (see js/main.js initMobileNavFallback) for when the
+   Bootstrap JS bundle fails to load — locks background scroll + dims the
+   page behind the menu, matching what Bootstrap's own JS would do. */
+body.offcanvas-open-fallback{ overflow: hidden; }
+body.offcanvas-open-fallback::after{
+  content: ""; position: fixed; inset: 0; z-index: 1040;
+  background: rgba(0,0,0,0.5);
+}
+
+.theme-toggle-btn{
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition-theme), transform .2s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .theme-toggle-btn:hover{ transform: rotate(-12deg); }
+}
+.theme-toggle-btn .moon-icon{ display: none; }
+[data-theme="dark"] .theme-toggle-btn .sun-icon{ display: none; }
+[data-theme="dark"] .theme-toggle-btn .moon-icon{ display: inline; }
+
+/* ---------- Loader ---------- */
+#loader{
+  position: fixed; inset: 0; z-index: 3000;
+  background: radial-gradient(circle at 50% 40%, #2A1710 0%, #17100B 70%);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+#loader.loader-hidden{ opacity: 0; visibility: hidden; pointer-events: none; }
+#loader-canvas{ position: absolute; inset: 0; width: 100%; height: 100%; }
+.loader-content{ position: relative; z-index: 2; text-align: center; opacity: 0; }
+.loader-logo{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  color: #FFF3E6;
+  letter-spacing: -0.01em;
+}
+.loader-logo span{ color: var(--orange); }
+.loader-tagline{
+  color: #D8C3B3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+.loader-bar{
+  width: 220px; height: 3px; margin: 28px auto 0;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px; overflow: hidden;
+}
+.loader-bar-fill{
+  width: 0%; height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--orange), var(--gold));
+}
+
+/* ---------- Hero ---------- */
+.hero{
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 20%, color-mix(in srgb, var(--orange) 18%, transparent), transparent),
+    var(--bg);
+}
+#hero-canvas{ position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-glow{
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 15% 85%, color-mix(in srgb, var(--primary) 14%, transparent), transparent 55%);
+  pointer-events: none;
+}
+.hero-inner{ position: relative; z-index: 2; }
+
+.eyebrow{
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--primary);
+  margin-bottom: 18px;
+}
+.hero-heading{
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.98;
+  margin-bottom: 24px;
+}
+.hero-heading .line{ display: block; }
+.hero-heading .accent{ color: var(--primary); }
+
+.hero-sub{
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  color: var(--muted);
+  max-width: 520px;
+  margin-bottom: 34px;
+}
+.hero-actions{ display: flex; gap: 16px; flex-wrap: wrap; }
+
+.scroll-cue{
+  position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); z-index: 2;
+}
+.scroll-cue span{
+  width: 1px; height: 28px; background: var(--muted);
+  position: relative; overflow: hidden;
+}
+.scroll-cue span::after{
+  content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+  background: var(--primary); animation: scrollcue 1.8s ease-in-out infinite;
+}
+@keyframes scrollcue{ 50%{ top: 100%; } 100%{ top: 100%; } }
+
+/* ---------- Category grid ---------- */
+.categories-section{ background: var(--surface); }
+.category-card{
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 12px;
+  text-align: center;
+  font-weight: 700;
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.category-thumb{
+  width: 134px; height: 134px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  transition: border-color .3s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .category-card:hover .category-thumb{ border-color: var(--primary); }
+  .category-card--sea:hover .category-thumb{ border-color: var(--sea-teal); }
+  .category-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); border-color: var(--primary); }
+  .category-card--sea:hover{ border-color: var(--sea-teal); }
+}
+
+/* ---------- Meat intro band ---------- */
+.meat-intro{ padding: 72px 0 24px; }
+.section-sub.mx-auto{ text-align: center; }
+
+/* ---------- Product cards ---------- */
+.product-section{ }
+.product-section--chicken{ background: var(--bg); }
+.product-section--mutton{ background: var(--surface); }
+.product-section--beef{ background: var(--bg); }
+.product-section--pork{ background: var(--surface); }
+
+.product-card{
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 26px 20px;
+  height: 100%;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
+  will-change: transform;
+}
+.product-section--mutton .product-card,
+.product-section--pork .product-card{ background: var(--bg); }
+
+@media (hover: hover) and (pointer: fine){
+  .product-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow-soft); border-color: var(--primary); }
+}
+.product-thumb{
+  display: block;
+  max-width: none; /* override the global img{max-width:100%} so the intentional bleed below works at every width */
+  width: calc(100% + 40px);
+  height: 140px;
+  object-fit: cover;
+  margin: -26px -20px 16px -20px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.product-icon{ font-size: 1.7rem; color: var(--primary); margin-bottom: 14px; display: block; }
+.product-card h3{ font-size: 1.1rem; margin-bottom: 6px; }
+.product-card p{ color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+.badge-tag{
+  position: absolute; top: 14px; right: 14px;
+  background: var(--gold); color: #2A1B00;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px; border-radius: 999px;
+}
+.badge-tag--ready{ background: var(--green); color: #fff; }
+
+/* ---------- Seafood section ---------- */
+.seafood-section{
+  background: linear-gradient(180deg, var(--sea-deep) 0%, #123c44 100%);
+  color: #EAF7F5;
+  overflow: hidden;
+}
+#seafood-canvas{ position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.9; }
+.product-card--sea{
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px);
+}
+@media (hover: hover) and (pointer: fine){
+  .product-card--sea:hover{ border-color: var(--sea-foam); background: rgba(255,255,255,0.09); }
+}
+.product-card--sea .product-icon{ color: var(--sea-foam); }
+.product-card--sea h3{ color: #F2FBFA; }
+.product-card--sea p{ color: #AFD8D3; }
+
+/* ---------- Call CTA band ---------- */
+.call-cta-section{
+  background: linear-gradient(135deg, var(--primary), var(--orange));
+  color: #fff;
+  text-align: center;
+}
+.call-cta-section .section-eyebrow{ color: rgba(255,255,255,0.85); }
+.call-cta-heading{
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  color: #fff;
+  margin-bottom: 16px;
+}
+.call-cta-sub{ color: rgba(255,255,255,0.9); max-width: 520px; margin-bottom: 30px; }
+.call-cta-section .btn-call{ background: #17100B; }
+@media (hover: hover) and (pointer: fine){
+  .call-cta-section .btn-call:hover{ background: #000; }
+}
+.call-cta-section .btn-whatsapp{ background: rgba(0,0,0,0.25); }
+
+/* ---------- About ---------- */
+.about-section{ background: var(--surface); }
+.stat-card{
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 24px; display: flex; flex-direction: column; gap: 4px;
+}
+.stat-num{ font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--primary); }
+.stat-label{ color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- Contact ---------- */
+.contact-section{ background: var(--bg); }
+.contact-card{
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 28px 20px; text-align: center; height: 100%;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .contact-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+}
+.contact-card i{ font-size: 1.6rem; color: var(--primary); margin-bottom: 10px; }
+.contact-card h3{ font-size: 1rem; margin-bottom: 6px; }
+.contact-link{ color: var(--muted); font-weight: 600; font-size: 0.92rem; }
+
+/* ---------- Footer ---------- */
+.site-footer{
+  background: var(--text); color: var(--bg);
+  padding: 64px 0 24px;
+}
+[data-theme="dark"] .site-footer{ background: #0F0B08; }
+.site-footer .brand-logo{ color: #fff; }
+.site-footer .brand-logo span{ color: var(--orange); }
+.footer-tagline{ color: rgba(255,255,255,0.6); }
+.site-footer h4{ font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 14px; }
+.site-footer a{ display: block; color: rgba(255,255,255,0.8); padding: 4px 0; font-size: 0.92rem; }
+@media (hover: hover) and (pointer: fine){
+  .site-footer a:hover{ color: var(--orange); }
+}
+.footer-social{ margin-top: 4px; }
+.footer-social a{ font-size: 1.2rem; padding: 0; }
+.footer-bottom{
+  border-top: 1px solid rgba(255,255,255,0.12);
+  margin-top: 48px; padding-top: 20px;
+  color: rgba(255,255,255,0.5); font-size: 0.85rem;
+}
+
+/* ---------- Mobile bottom nav ---------- */
+.bottom-nav{
+  position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 900;
+  /* translateZ(0) forces its own compositor layer, which keeps this bar
+     correctly pinned to the viewport (not the document) while scrolling
+     on iOS Safari / older Android WebViews, where plain position:fixed
+     inside a scrolling page can otherwise jitter or lag behind. */
+  transform: translateZ(0);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 6px calc(6px + env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-strong);
+  /* overflow lives on the bar itself so the rounded shell + shadow stay
+     put while the item row underneath scrolls horizontally */
+  overflow: hidden;
+}
+.bottom-nav-scroll{
+  position: relative;
+  display: flex; align-items: center; gap: 2px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange) transparent;
+  padding-bottom: 4px; margin-bottom: -4px; /* room for the visible scrollbar without adding bar height */
+}
+.bottom-nav-scroll::-webkit-scrollbar{ height: 4px; }
+.bottom-nav-scroll::-webkit-scrollbar-track{ background: transparent; }
+.bottom-nav-scroll::-webkit-scrollbar-thumb{ background: var(--orange); border-radius: 999px; }
+.bottom-nav-item{
+  flex: 0 0 auto;
+  width: 62px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 0.62rem; font-weight: 700; color: var(--muted);
+  padding: 6px 0; border-radius: 999px;
+  transition: color .25s ease, transform .2s ease;
+  background: none; border: none; font-family: var(--font-body); cursor: pointer;
+  position: relative; z-index: 1;
+}
+.bottom-nav-item i{ font-size: 1.15rem; }
+.bottom-nav-item.active{ color: var(--primary); }
+.bottom-nav-item:active{ transform: scale(0.92); }
+.bottom-nav-item--call{ color: #fff; background: var(--primary); }
+.bottom-nav-item--call.active{ background: var(--primary); color: #fff; }
+
+/* Sliding indicator: one pill that glides beneath whichever item is
+   active, instead of every item flashing its own background on/off. */
+.bottom-nav-indicator{
+  position: absolute; top: 0; left: 0; z-index: 0;
+  height: 100%; width: 62px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--orange) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--orange) 35%, transparent);
+  transition: transform .38s cubic-bezier(.22,1,.36,1), width .38s cubic-bezier(.22,1,.36,1);
+  will-change: transform, width;
+  pointer-events: none;
+  opacity: 0;
+}
+.bottom-nav-indicator.is-visible{ opacity: 1; }
+
+/* ---------- Floating WhatsApp button (right side, all breakpoints) ---------- */
+.whatsapp-float{
+  position: fixed;
+  right: 18px;
+  bottom: 92px; /* clears the mobile bottom-nav bar */
+  z-index: 950;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.55rem;
+  box-shadow: var(--shadow-strong);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  transform: translateZ(0);
+}
+.whatsapp-float i{ position: relative; z-index: 1; }
+.whatsapp-float::before{
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: var(--green);
+  opacity: 0.55;
+  animation: wa-pulse 2.2s ease-out infinite;
+  z-index: 0;
+}
+@keyframes wa-pulse{
+  0%{ transform: scale(1); opacity: 0.55; }
+  100%{ transform: scale(1.7); opacity: 0; }
+}
+@media (hover: hover) and (pointer: fine){
+  .whatsapp-float:hover{ color:#fff; transform: translateY(-3px) scale(1.05); box-shadow: var(--shadow-strong); }
+}
+body.reduced-motion .whatsapp-float::before{ animation: none; display: none; }
+
+@media (max-width: 1199px){
+  .whatsapp-float{ right: 14px; bottom: 92px; width: 50px; height: 50px; font-size: 1.35rem; }
+}
+@media (min-width: 1200px){
+  .whatsapp-float{ bottom: 28px; }
+}
+
+/* ---------- Back-to-top button (stacked above the WhatsApp float) ---------- */
+.back-to-top{
+  position: fixed;
+  right: 18px;
+  bottom: 156px; /* whatsapp-float (56px) + 8px gap + whatsapp bottom offset(92px) */
+  z-index: 950;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(10px) translateZ(0);
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease, background .25s ease, border-color .25s ease;
+}
+.back-to-top.is-visible{ opacity: 1; transform: translateY(0) translateZ(0); pointer-events: auto; }
+@media (hover: hover) and (pointer: fine){
+  .back-to-top:hover{ border-color: var(--primary); color: var(--primary); }
+}
+@media (max-width: 1199px){
+  .back-to-top{ right: 14px; bottom: 150px; width: 50px; height: 50px; font-size: 1.35rem; }
+}
+@media (min-width: 1200px){
+  .back-to-top{ bottom: 92px; }
+}
+@media (max-width: 380px){
+  .back-to-top{ width: 46px; height: 46px; right: 10px; font-size: 1.2rem; }
+}
+
+/* ---------- Custom cursor (desktop only) ---------- */
+.cursor-dot, .cursor-ring{
+  position: fixed; top: 0; left: 0; pointer-events: none; z-index: 2500;
+  border-radius: 50%; transform: translate(-50%, -50%);
+  display: none;
+}
+.cursor-dot{ width: 6px; height: 6px; background: var(--primary); }
+.cursor-ring{ width: 34px; height: 34px; border: 1.5px solid var(--primary); transition: width .2s ease, height .2s ease, opacity .2s ease, border-color .2s ease; opacity: 0.7; }
+.cursor-ring.cursor-expand{ width: 54px; height: 54px; opacity: 1; }
+body.has-custom-cursor{ cursor: none; }
+body.has-custom-cursor .cursor-dot, body.has-custom-cursor .cursor-ring{ display: block; }
+body.has-custom-cursor a, body.has-custom-cursor button{ cursor: none; }
+
+/* ---------- Sound toggle ---------- */
+.sound-toggle{
+  position: fixed; left: 18px; bottom: 92px; z-index: 900;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-soft);
+}
+.sound-toggle.sound-on{ color: var(--primary); border-color: var(--primary); }
+@media (min-width: 1200px){ .sound-toggle{ bottom: 24px; } }
+
+/* ---------- Reveal-on-scroll base state (see animations.js) ---------- */
+[data-reveal]{ opacity: 1; }
+body:not(.reduced-motion) [data-reveal]{ opacity: 0; transform: translateY(24px); }
+
+/* ---------- Small screens: tighten spacing, safe padding for bottom nav ---------- */
+@media (max-width: 1199px){
+  body{ padding-bottom: 84px; }
+  .hero-actions .btn-call, .hero-actions .btn-outline-custom{ width: 100%; justify-content: center; }
+  .hero-actions{ flex-direction: column; }
+}
+@media (max-width: 767px){
+  /* Tighten the header nav row so brand + toggler + theme button never wrap on narrow phones */
+  .site-header .navbar{ gap: 8px; }
+  .nav-sheet .offcanvas-link{ padding: 14px 4px; font-size: 1.15rem; }
+  .nav-sheet .btn{ width: 100%; justify-content: center; }
+}
+@media (max-width: 380px){
+  .hero-heading{ font-size: 2.6rem; }
+  .section-heading{ font-size: 1.7rem; }
+  .whatsapp-float{ width: 46px; height: 46px; font-size: 1.2rem; right: 10px; }
+  .sound-toggle{ left: 10px; }
+}

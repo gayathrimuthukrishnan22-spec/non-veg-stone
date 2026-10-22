@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>NonVeg.Store — Chicken, Mutton, Beef, Seafood & More</title>
+<meta name="description" content="Discover chicken, mutton, beef, seafood and more at NonVeg.Store. Explore premium non-veg categories and connect directly with us.">
+<link rel="canonical" href="https://nonveg.store/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="NonVeg.Store — Chicken, Mutton, Beef, Seafood & More">
+<meta property="og:description" content="Crave it. Find it. Call it. One premium place for chicken, mutton, beef, seafood and more.">
+<meta property="og:url" content="https://nonveg.store/">
+<meta property="og:image" content="https://nonveg.store/assets/images/hero/og-cover.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NonVeg.Store — Chicken, Mutton, Beef, Seafood & More">
+<meta name="twitter:description" content="Crave it. Find it. Call it. Discover premium non-veg categories and connect directly.">
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍖</text></svg>">
+
+<!-- Bootstrap 5 + Icons (CDN — swap for /css/bootstrap.min.css and /css/bootstrap-icons.css for offline/local hosting) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<!-- Fonts: a confident display serif for headings (the "menu board" voice) + a clean grotesk for UI/body -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Organization JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NonVeg.Store",
+  "url": "https://nonveg.store/",
+  "logo": "https://nonveg.store/assets/icons/logo.png",
+  "slogan": "Crave it. Find it. Call it.",
+  "sameAs": []
+}
+</script>
+<!-- WebSite JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NonVeg.Store",
+  "url": "https://nonveg.store/"
+}
+</script>
+</head>
+<body>
+
+<!-- =========================================================
+     CINEMATIC LOADER
+     A 5-second brand moment, not a spinner. Three.js renders
+     floating meat/seafood-inspired shapes behind the wordmark.
+     Respects prefers-reduced-motion (see animations.js / css).
+========================================================= -->
+<div id="loader" aria-hidden="true">
+  <canvas id="loader-canvas"></canvas>
+  <div class="loader-content">
+    <div class="loader-logo">NonVeg<span>.Store</span></div>
+    <div class="loader-tagline">Crave it. Find it. Call it.</div>
+    <div class="loader-bar"><div class="loader-bar-fill" id="loader-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- =========================================================
+     HEADER — sticky, blurred, transparent-on-scroll-top
+========================================================= -->
+<header id="site-header" class="site-header">
+  <nav class="navbar navbar-expand-xl container-fluid px-3 px-xl-5">
+    <a class="brand-logo" href="#home">NonVeg<span>.Store</span></a>
+
+    <button class="navbar-toggler d-xl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas" aria-label="Open menu">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="d-none d-xl-flex align-items-center gap-3 gap-xl-4 mx-auto main-nav">
+      <a href="#home" class="nav-link-custom">Home</a>
+      <a href="#meat" class="nav-link-custom">Meat</a>
+      <a href="#seafood" class="nav-link-custom">Seafood</a>
+      <a href="#explore" class="nav-link-custom">Explore</a>
+      <a href="#about" class="nav-link-custom">About</a>
+      <a href="#contact" class="nav-link-custom">Contact</a>
+    </div>
+
+    <div class="d-none d-xl-flex align-items-center gap-3">
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle theme">
+        <i class="bi bi-sun-fill sun-icon"></i>
+        <i class="bi bi-moon-stars-fill moon-icon"></i>
+      </button>
+      <a href="#" class="btn btn-call js-call-link">
+        <i class="bi bi-telephone-fill"></i> Call Us
+      </a>
+    </div>
+
+    <button id="theme-toggle-mobile" class="theme-toggle-btn d-xl-none ms-2" aria-label="Toggle dark mode">
+      <i class="bi bi-sun-fill sun-icon"></i>
+      <i class="bi bi-moon-stars-fill moon-icon"></i>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile offcanvas nav — IMPORTANT: this must live OUTSIDE <header>.
+     #site-header uses backdrop-filter, and per the CSS spec any element
+     with backdrop-filter/filter/transform becomes the "containing block"
+     for position:fixed descendants. Bootstrap's .offcanvas is
+     position:fixed, so nesting it inside the blurred header made the
+     menu panel size/position itself against the 78px header box instead
+     of the full viewport — it was rendering, just squashed into an
+     almost-invisible sliver. Moving it here (a plain <body> child) fixes
+     that. -->
+<div class="offcanvas offcanvas-end nav-sheet" tabindex="-1" id="navOffcanvas">
+  <div class="offcanvas-header">
+    <span class="brand-logo">NonVeg<span>.Store</span></span>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body d-flex flex-column gap-1">
+    <a href="#home" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">Home</a>
+    <a href="#meat" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">Meat</a>
+    <a href="#seafood" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">Seafood</a>
+    <a href="#explore" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">Explore</a>
+    <a href="#about" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">About</a>
+    <a href="#contact" class="nav-link-custom offcanvas-link" data-bs-dismiss="offcanvas">Contact</a>
+    <a href="#" class="btn btn-call js-call-link mt-3"><i class="bi bi-telephone-fill"></i> Call Us Directly</a>
+    <a href="#" class="btn btn-whatsapp js-whatsapp-link mt-2"><i class="bi bi-whatsapp"></i> WhatsApp Us</a>
+  </div>
+</div>
+
+<main>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+<section id="home" class="hero">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-glow"></div>
+  <div class="container hero-inner">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <p class="eyebrow" data-reveal>Premium Non-Veg Discovery</p>
+        <h1 class="hero-heading" data-reveal>
+          <span class="line">Crave it.</span>
+          <span class="line">Find it.</span>
+          <span class="line accent">Call it.</span>
+        </h1>
+        <p class="hero-sub" data-reveal>One premium place for chicken, mutton, beef, seafood and more. Discover what you're craving — then connect directly with us.</p>
+        <div class="hero-actions" data-reveal>
+          <a href="#" class="btn btn-call btn-lg js-call-link"><i class="bi bi-telephone-fill"></i> Call Us Directly</a>
+          <a href="#meat" class="btn btn-outline-custom btn-lg">Explore Non-Veg <i class="bi bi-arrow-down-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><span></span> Scroll</div>
+</section>
+
+<!-- =========================================================
+     CATEGORY PICKER
+========================================================= -->
+<section id="explore" class="section categories-section">
+  <div class="container">
+    <p class="section-eyebrow" data-reveal>Every craving, one counter</p>
+    <h2 class="section-heading" data-reveal>Pick Your Craving.</h2>
+
+    <div class="row g-3 g-md-4 category-grid" data-reveal>
+      <!-- Meat categories -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#chicken" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/chicken.jpg" alt="Chicken" loading="lazy" decoding="async">
+          <span>Chicken</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#mutton" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/Goat.jpg" alt="Mutton / Goat" loading="lazy" decoding="async">
+          <span>Mutton / Goat</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#beef" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/beef.jpg" alt="Beef" loading="lazy" decoding="async">
+          <span>Beef</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#pork" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/pork.jpg" alt="Pork" loading="lazy" decoding="async">
+          <span>Pork</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#more-meat" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/duck.jpg" alt="Duck" loading="lazy" decoding="async">
+          <span>Duck</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#more-meat" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/rabbit.jpg" alt="Rabbit" loading="lazy" decoding="async">
+          <span>Rabbit</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#more-meat" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/turkey.jpg" alt="Turkey" loading="lazy" decoding="async">
+          <span>Turkey</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#more-meat" class="category-card">
+          <img class="category-thumb" src="assets/images/non-veg/quail.jpg" alt="Quail" loading="lazy" decoding="async">
+          <span>Quail</span>
+        </a>
+      </div>
+      <!-- Seafood categories -->
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#seafood" class="category-card category-card--sea">
+          <img class="category-thumb" src="assets/images/non-veg/fish.jpg" alt="Fish" loading="lazy" decoding="async">
+          <span>Fish</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#seafood" class="category-card category-card--sea">
+          <img class="category-thumb" src="assets/images/non-veg/prawns.jpg" alt="Prawns" loading="lazy" decoding="async">
+          <span>Prawns</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#seafood" class="category-card category-card--sea">
+          <img class="category-thumb" src="assets/images/non-veg/crab.jpg" alt="Crab" loading="lazy" decoding="async">
+          <span>Crab</span>
+        </a>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <a href="#seafood" class="category-card category-card--sea">
+          <img class="category-thumb" src="assets/images/non-veg/lobster.jpg" alt="Lobster" loading="lazy" decoding="async">
+          <span>Lobster</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     MEAT — shared wrapper anchor for header nav
+========================================================= -->
+<section id="meat" class="meat-intro">
+  <div class="container text-center">
+    <p class="section-eyebrow" data-reveal>The meat counter</p>
+    <h2 class="section-heading" data-reveal>Four cuts. One standard.</h2>
+    <p class="section-sub mx-auto" data-reveal>Chicken, mutton, beef and pork — sourced, cut and ready the way premium kitchens expect. Browse each counter below.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     CHICKEN
+========================================================= -->
+<section id="chicken" class="section product-section product-section--chicken">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4" data-reveal>
+      <div>
+        <p class="section-eyebrow">Counter 01</p>
+        <h2 class="section-heading mb-0">Chicken</h2>
+      </div>
+      <p class="section-note">Whole birds, curry cuts &amp; ready-to-cook.</p>
+    </div>
+
+    <div class="row g-3 g-md-4 product-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/whole.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><span class="badge-tag">Popular</span><h3>Whole Chicken</h3><p>Cleaned and dressed, ready for the pot or the grill.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/curry-cut.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Curry Cut</h3><p>Classic bone-in pieces, cut for everyday curries.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/breast.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Breast</h3><p>Boneless, lean, high-protein cuts.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/wings.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Wings</h3><p>Perfect for frying, grilling or tandoor.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/leg.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Leg</h3><p>Full leg pieces, skin-on or skinless.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/tight.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Thigh</h3><p>Juicy, well-marbled thigh cuts.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/liver.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Liver</h3><p>Fresh organ meat for regional specialities.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/gizzard.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Gizzard</h3><p>A favourite for spiced, slow-cooked dishes.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/fried.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><span class="badge-tag badge-tag--ready">Ready-to-eat</span><h3>Fried Chicken</h3><p>Crisp outside, juicy inside.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/grilled.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><span class="badge-tag badge-tag--ready">Ready-to-eat</span><h3>Grilled Chicken</h3><p>Char-grilled and smoky.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/tandoorie.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><span class="badge-tag badge-tag--ready">Ready-to-eat</span><h3>Tandoori</h3><p>Marinated and clay-oven roasted.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/chicken/briyanicut.jpg" alt="Chicken — example" width="400" height="140" loading="lazy" decoding="async"><h3>Biryani Cut</h3><p>Sized specifically for biryani.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     MUTTON
+========================================================= -->
+<section id="mutton" class="section product-section product-section--mutton">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4" data-reveal>
+      <div>
+        <p class="section-eyebrow">Counter 02</p>
+        <h2 class="section-heading mb-0">Mutton</h2>
+      </div>
+      <p class="section-note">Goat cuts, bone-in and biryani ready.</p>
+    </div>
+    <div class="row g-3 g-md-4 product-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/mutton.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Curry Cut</h3><p>The everyday cut for home-style curries.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/chops.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Chops</h3><p>Thick-cut chops for grilling or pan-searing.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/ribs.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Ribs</h3><p>Slow-cook or braise for deep flavour.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/leg.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Leg</h3><p>Whole or portioned leg cuts.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/shoulder.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Shoulder</h3><p>Well-marbled, ideal for slow roasting.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/mince.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Mince</h3><p>Freshly minced for kheema and kebabs.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/liver.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Liver</h3><p>Organ cuts for regional delicacies.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/mutton/briyanicut.jpg" alt="Mutton — example" width="400" height="140" loading="lazy" decoding="async"><h3>Biryani Cuts</h3><p>Bone-in pieces sized for biryani.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     BEEF
+========================================================= -->
+<section id="beef" class="section product-section product-section--beef">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4" data-reveal>
+      <div>
+        <p class="section-eyebrow">Counter 03</p>
+        <h2 class="section-heading mb-0">Beef</h2>
+      </div>
+      <p class="section-note">Availability varies by location — please confirm with us before ordering.</p>
+    </div>
+    <div class="row g-3 g-md-4 product-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/beef/beef.jpg" alt="Beef — example" width="400" height="140" loading="lazy" decoding="async"><h3>Curry Cuts</h3><p>Classic bone-in and boneless curry pieces.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/beef/steak.jpg" alt="Beef — example" width="400" height="140" loading="lazy" decoding="async"><h3>Steak Cuts</h3><p>Portioned cuts for pan-searing or grilling.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/beef/mince.jpg" alt="Beef — example" width="400" height="140" loading="lazy" decoding="async"><h3>Mince</h3><p>Freshly ground for kebabs and patties.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/beef/ribs.jpg" alt="Beef — example" width="400" height="140" loading="lazy" decoding="async"><h3>Ribs</h3><p>Rich cuts suited to slow cooking.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/beef/slow-cook.jpg" alt="Beef — example" width="400" height="140" loading="lazy" decoding="async"><h3>Slow-Cook Cuts</h3><p>Built for long, low-heat preparations.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     PORK
+========================================================= -->
+<section id="pork" class="section product-section product-section--pork">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4" data-reveal>
+      <div>
+        <p class="section-eyebrow">Counter 04</p>
+        <h2 class="section-heading mb-0">Pork</h2>
+      </div>
+      <p class="section-note">Availability is configurable per outlet — call to confirm.</p>
+    </div>
+    <div class="row g-3 g-md-4 product-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/pork/pork.jpg" alt="Pork — example" width="400" height="140" loading="lazy" decoding="async"><h3>Pork Curry Cuts</h3><p>Bone-in pieces for everyday curries.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/pork/chops.jpg" alt="Pork — example" width="400" height="140" loading="lazy" decoding="async"><h3>Pork Chops</h3><p>Thick-cut, ideal for the pan or grill.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/pork/ribs.jpg" alt="Pork — example" width="400" height="140" loading="lazy" decoding="async"><h3>Ribs</h3><p>Great for slow roasting or braising.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/pork/belly.jpg" alt="Pork — example" width="400" height="140" loading="lazy" decoding="async"><h3>Belly</h3><p>Rich, layered cuts for roasting.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card" data-reveal><img class="product-thumb" src="assets/images/pork/mince.jpg" alt="Pork — example" width="400" height="140" loading="lazy" decoding="async"><h3>Mince</h3><p>Freshly ground, ready to cook.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<div id="more-meat"></div>
+
+<!-- =========================================================
+     SEAFOOD
+========================================================= -->
+<section id="seafood" class="section seafood-section">
+  <canvas id="seafood-canvas" aria-hidden="true"></canvas>
+  <div class="container position-relative">
+    <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4" data-reveal>
+      <div>
+        <p class="section-eyebrow section-eyebrow--sea">Seafood Mode</p>
+        <h2 class="section-heading section-heading--sea mb-0">SEAFOOD MODE: ON</h2>
+      </div>
+      <p class="section-note section-note--sea">Fresh from the coast, cut and cleaned to order.</p>
+    </div>
+    <div class="row g-3 g-md-4 product-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/fish.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Fish</h3><p>A rotating catch of seasonal varieties.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/prawns.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Prawns</h3><p>Peeled, deveined or shell-on.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/crab.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Crab</h3><p>Whole or cleaned and cracked.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/lobster.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Lobster</h3><p>Premium catch, subject to availability.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/squid.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Squid</h3><p>Rings and tubes, cleaned.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/octopus.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Octopus</h3><p>Cleaned and ready to cook.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/mussels.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Mussels</h3><p>Shell-on, cleaned and scrubbed.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/clams.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Clams</h3><p>Fresh, purged and ready.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/oysters.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Oysters</h3><p>Shucked or shell-on, on request.</p></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="product-card product-card--sea" data-reveal><img class="product-thumb" src="assets/images/seafood/shellfish.jpg" alt="Seafood — example" width="400" height="140" loading="lazy" decoding="async"><h3>Shellfish Mix</h3><p>A curated mix for seafood boils.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     DIRECT CONTACT CTA
+========================================================= -->
+<section class="section call-cta-section">
+  <div class="container text-center">
+    <p class="section-eyebrow" data-reveal>The fastest way to get what you want</p>
+    <h2 class="call-cta-heading" data-reveal>Don't search.<br>Just call.</h2>
+    <p class="call-cta-sub mx-auto" data-reveal>Tell us what you're looking for and we'll help you connect with the right non-veg option.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap" data-reveal>
+      <a href="#" class="btn btn-call btn-lg js-call-link"><i class="bi bi-telephone-fill"></i> Call Now</a>
+      <a href="#" class="btn btn-whatsapp btn-lg js-whatsapp-link"><i class="bi bi-whatsapp"></i> WhatsApp Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6" data-reveal>
+        <p class="section-eyebrow">About NonVeg.Store</p>
+        <h2 class="section-heading">Your premium destination for meat, poultry and seafood discovery.</h2>
+        <p class="section-sub">We built NonVeg.Store to make one thing simple: knowing exactly what non-veg options exist near you, without the guesswork. Browse categories, understand your cuts, then reach us directly — no clunky checkout, no middlemen.</p>
+      </div>
+      <div class="col-lg-6" data-reveal>
+        <div class="about-stats row g-3">
+          <div class="col-6"><div class="stat-card"><span class="stat-num">30+</span><span class="stat-label">Cuts &amp; varieties</span></div></div>
+          <div class="col-6"><div class="stat-card"><span class="stat-num">4</span><span class="stat-label">Meat counters</span></div></div>
+          <div class="col-6"><div class="stat-card"><span class="stat-num">10</span><span class="stat-label">Seafood categories</span></div></div>
+          <div class="col-6"><div class="stat-card"><span class="stat-num">1</span><span class="stat-label">Call away</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+<section id="contact" class="section contact-section">
+  <div class="container">
+    <p class="section-eyebrow" data-reveal>Reach us</p>
+    <h2 class="section-heading" data-reveal>Contact NonVeg.Store</h2>
+    <div class="row g-3 g-md-4 mt-2">
+      <div class="col-md-6 col-lg-3" data-reveal>
+        <div class="contact-card">
+          <i class="bi bi-telephone-fill"></i>
+          <h3>Call</h3>
+          <a href="#" class="js-call-link contact-link">View number</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3" data-reveal>
+        <div class="contact-card">
+          <i class="bi bi-whatsapp"></i>
+          <h3>WhatsApp</h3>
+          <a href="#" class="js-whatsapp-link contact-link">Message us</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3" data-reveal>
+        <div class="contact-card">
+          <i class="bi bi-geo-alt-fill"></i>
+          <h3>Location</h3>
+          <span class="contact-link js-location-text">Your city, India</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3" data-reveal>
+        <div class="contact-card">
+          <i class="bi bi-clock-fill"></i>
+          <h3>Hours</h3>
+          <span class="contact-link js-hours-text">7:00 AM – 9:00 PM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div class="brand-logo mb-2">NonVeg<span>.Store</span></div>
+        <p class="footer-tagline">Crave it. Find it. Call it.</p>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h4>Explore</h4>
+        <a href="#chicken">Chicken</a>
+        <a href="#mutton">Mutton</a>
+        <a href="#beef">Beef</a>
+        <a href="#pork">Pork</a>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h4>Seafood</h4>
+        <a href="#seafood">Fish</a>
+        <a href="#seafood">Prawns</a>
+        <a href="#seafood">Crab</a>
+        <a href="#seafood">Lobster</a>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h4>Company</h4>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h4>Connect</h4>
+        <div class="d-flex gap-3 footer-social">
+          <a href="#" class="js-social-instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="js-social-facebook" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="js-whatsapp-link" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> NonVeg.Store. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     MOBILE APP-STYLE BOTTOM NAVIGATION
+========================================================= -->
+<nav class="bottom-nav d-xl-none" aria-label="Mobile navigation">
+  <div class="bottom-nav-scroll" id="bottomNavScroll">
+    <span class="bottom-nav-indicator" id="bottomNavIndicator" aria-hidden="true"></span>
+    <a href="#home" class="bottom-nav-item active" data-target="home">
+      <i class="bi bi-house-door-fill"></i><span>Home</span>
+    </a>
+    <a href="#meat" class="bottom-nav-item" data-target="meat">
+      <i class="bi bi-egg-fried"></i><span>Meat</span>
+    </a>
+    <a href="#seafood" class="bottom-nav-item" data-target="seafood">
+      <i class="bi bi-water"></i><span>Seafood</span>
+    </a>
+    <a href="#explore" class="bottom-nav-item" data-target="explore">
+      <i class="bi bi-compass"></i><span>Explore</span>
+    </a>
+    <a href="#about" class="bottom-nav-item" data-target="about">
+      <i class="bi bi-info-circle"></i><span>About</span>
+    </a>
+    <a href="#contact" class="bottom-nav-item" data-target="contact">
+      <i class="bi bi-envelope"></i><span>Contact</span>
+    </a>
+    <a href="#" class="bottom-nav-item bottom-nav-item--call js-call-link" data-target="call">
+      <i class="bi bi-telephone-fill"></i><span>Call</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Custom cursor (desktop only, injected/controlled via JS) -->
+<div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+<div id="cursor-ring" class="cursor-ring" aria-hidden="true"></div>
+
+<!-- Sound toggle (bottom-left, small, unobtrusive) -->
+<button id="sound-toggle" class="sound-toggle" aria-label="Toggle sound effects" title="Toggle sound">
+  <i class="bi bi-volume-mute-fill"></i>
+</button>
+
+<!-- Floating WhatsApp button (right side, always visible, all breakpoints) -->
+<a href="#" class="whatsapp-float js-whatsapp-link" aria-label="Chat with us on WhatsApp" title="Chat on WhatsApp" target="_blank" rel="noopener">
+  <i class="bi bi-whatsapp"></i>
+</a>
+
+<!-- Back-to-top arrow, stacked right above the WhatsApp button. Hidden
+     until the user scrolls down (see js/main.js initBackToTop). -->
+<button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">
+  <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script src="js/theme.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/three-scene.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
